@@ -1,0 +1,1 @@
+# Criando aplicação que utiliza Python/Flask com React native js
