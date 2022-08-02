@@ -20,12 +20,12 @@ def conteudo():
             pdf_file = open(arquivo_pdf_novo, 'rb')
             read_pdf = PdfReader(pdf_file)
             number_of_pages = read_pdf.getNumPages()
-            page = read_pdf.pages[0]
-            page2 = read_pdf.pages[1]
-            page3 = read_pdf.pages[2]
-            page_content = page.extractText()
-            page_content += '<br/><br/>'+page2.extractText()
-            page_content += '<br/><br/>'+page3.extractText()
+            page_content = '<b>Conteúdo do Arquivo PDF</b>'
+
+            for page_pdf in read_pdf.pages:
+                page = page_pdf
+                page_content += '<br/><br/>'+page_pdf.extractText()
+
             parsed = ''.join(page_content)
             #parsed = re.sub('\n', '', parsed)
 
