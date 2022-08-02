@@ -1,5 +1,5 @@
 from flask import Flask
-import PyPDF2
+from PyPDF2 import PdfReader
 import re
 
 app = Flask(__name__)
@@ -7,35 +7,35 @@ app = Flask(__name__)
 @app.route("/")
 def home():
 
-    return {'Tela inicial':'Tela inicial'}
+    return 'Tela inicial'
 
 # Conteudo
 @app.route("/contentPDF")
-def conteudo():
-    #arquivo_pdf_novo = "C:\\Users\\marce\\Desktop\\Projetos VSCode\\DocsTestRead\\CCMEI-34729557000180.pdf"
-    #arquivo_pdf_novo = ""
-    arquivo_pdf_novo = novoArquivo("")
+def conteudo(): 
+    arquivo_pdf_novo = "C:\\Users\\marce\\Documents\\INFORME.pdf"
+    print('O arquivo é '+ arquivo_pdf_novo)
     conteudo = "Sem arquivo para ler"
     if arquivo_pdf_novo != "":
-        pdf_file = open(arquivo_pdf_novo, 'rb')
-        read_pdf = PyPDF2.PdfFileReader(pdf_file)
-        number_of_pages = read_pdf.getNumPages()
-        page = read_pdf.getPage(0)
-        page_content = page.extractText()
-        parsed = ''.join(page_content)
-        #parsed = re.sub('n', '', parsed)
+        try:
+            pdf_file = open(arquivo_pdf_novo, 'rb')
+            read_pdf = PdfReader(pdf_file)
+            number_of_pages = read_pdf.getNumPages()
+            page = read_pdf.pages[0]
+            page2 = read_pdf.pages[1]
+            page3 = read_pdf.pages[2]
+            page_content = page.extractText()
+            page_content += '<br/><br/>'+page2.extractText()
+            page_content += '<br/><br/>'+page3.extractText()
+            parsed = ''.join(page_content)
+            #parsed = re.sub('\n', '', parsed)
 
-        conteudo = parsed    
-    return {"conteudo": [conteudo.__str__()]}
-    #return {"conteudo": ["Conteudo 1","Conteudo 2","teste 3","Teste 4"]}
+            conteudo = parsed  
 
+        except Exception as error:
+            print('Deu ruim!' + error.__str__())
+        
+    return conteudo.__str__()
 
-def novoArquivo(caminhoEnviado):
-    print('esse é o caminho:', caminhoEnviado)
-    if caminhoEnviado == "":
-        return "C:\\Users\\marce\\Desktop\\Projetos VSCode\\DocsTestRead\\CCMEI-34729557000180.pdf"
-    else:
-        return caminhoEnviado
 
 if __name__ == "__main__":
     app.run(debug=True)
